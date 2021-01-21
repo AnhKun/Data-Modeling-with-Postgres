@@ -98,6 +98,10 @@ on conflict(start_time) do nothing
 # FIND SONGS
 
 song_select = ("""
+SELECT song_id, a.artist_id 
+FROM songs s join artists a
+    on s.artist_id = a.artist_id 
+WHERE title = %s and name = %s and duration = %s
 """)
 
 # QUERY LISTS

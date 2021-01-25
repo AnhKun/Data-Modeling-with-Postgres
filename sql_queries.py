@@ -74,12 +74,13 @@ VALUES(%s,%s,%s,%s,%s,%s,%s,%s)
 user_table_insert = ("""
 INSERT INTO users(user_id, first_name, last_name, gender, level) \
 VALUES(%s,%s,%s,%s,%s)
-on conflict(user_id) do nothing
+on conflict(user_id) DO UPDATE SET level=EXCLUDED.level
 """)
 
 song_table_insert = ("""
 INSERT INTO songs(song_id, title, artist_id, year, duration) \
 VALUES(%s,%s,%s,%s,%s)
+on conflict(song_id) do nothing
 """)
 
 artist_table_insert = ("""

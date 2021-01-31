@@ -110,20 +110,18 @@ With **Table time**:
 INSERT INTO time(start_time, hour, day, week, month, year, weekday) \
 VALUES(%s,%s,%s,%s,%s,%s,%s)
 on conflict(start_time) do nothing``
-<h3>Project process</h3>
-<h4>Create tables</h4>
-<ul>
-  <li>Write <code>CREATE</code> statements in <code>sql_queries.py</code> to create each table.</li>
-  <li>Write <code>DROP</code> statements in <code>sql_queries.py</code> to drop each table if it exists.</li>
-  <li>Run <code>create_tables.py</code> to create your database and tables</li>
-  <li>Run <code>test.ipynb</code> to confirm the creation of your tables with the correct columns. Make sure to click "Restart kernel" to close the connection to the database after running this notebook.
-</li>
-</ul>
 
-<h4>Build ETL process</h4>
+## Project process
+### Create tables
+1. Write ``CREATE`` statements in ``sql_queries.py`` to create each table.
+2. Write ``DROP`` statements in ``sql_queries.py`` to drop each table if it exists.
+3. Run ``create_tables.py`` to create your database and tables.
+4. Run ``test.ipynb`` to confirm the creation of your tables with the correct columns. Make sure to click "Restart kernel" to close the connection to the database after running this notebook.
+
+### Build ETL process
 
 Follow instructions in the etl.ipynb notebook to develop ETL processes for each table. At the end of each table section, or at the end of the notebook, run test.ipynb to confirm that records were successfully inserted into each table. Remember to rerun create_tables.py to reset your tables before each time you run this notebook.
-__REMEMBER TO RUN TEST.PY WHENEVER CREATE AND INSERT DATA__
+ __REMEMBER TO RUN TEST.PY WHENEVER CREATE AND INSERT DATA__
 1. Process `song_data`
 
 In this first part, you'll perform ETL on the first dataset, `song_data`, to create the `songs` and `artists` dimensional tables.
@@ -151,19 +149,6 @@ Let's perform ETL on a single log file and load a single record into each table.
 df['datetime'] = pd.to_datetime(df['ts'], unit='ms')
 
 ``
-to convert ts(timestamp) to datetime default and
-
-``
-t=df
-t['year']=t['datetime'].dt.year
-t['month']=t['datetime'].dt.month
-t['day']=t['datetime'].dt.day
-t['hour']=t['datetime'].dt.hour
-t['week']=t['datetime'].dt.week
-t['weekday_name']=t['datetime'].dt.weekday_name
-``
-to extract datetime to year, month, day, hour, week, weekdays
-
 - With songplays: 
 ##### Extract Data and Songplays Table
 This one is a little more complicated since information from the songs table, artists table, and original log file are all needed for the `songplays` table. Since the log file does not specify an ID for either the song or the artist, you'll need to get the song ID and artist ID by querying the songs and artists tables to find matches based on song title, artist name, and song duration time.
@@ -172,9 +157,17 @@ This one is a little more complicated since information from the songs table, ar
 
 ##### Insert Records into Songplays Table
 - Implement the `songplay_table_insert` query and run the cell below to insert records for the songplay actions in this log file into the `songplays` table. Remember to run `create_tables.py` before running the cell below to ensure you've created/resetted the `songplays` table in the sparkify database.
-<h4>Build ETL pipelines</h4>
+### Build ETL pipelines
 
 - Use what you've completed in etl.ipynb to complete etl.py, where you'll process the entire datasets. Remember to run create_tables.py before running etl.py to reset your tables. Run test.ipynb to confirm your records were successfully inserted into each table.
 - We implement : in insert data of <code>sql_queries.py</code> with:
 `` INSERT INTO.... ON CONFLICT(xxx) do nothing``
 when receive error `already exist ` the value.
+
+## How to run the project
+Below are steps you have to follow to achieve the project's target:
+1. Run ``create_tables.py`` to create your database and tables. You run this file to reset your tables before each time you run your ETL scripts.
+2. Run ``sql_queries.py``.
+3. Run ``test.ipynb`` to confirm the creation of your tables with the correct columns. Make sure to click "Restart kernel" to close the connection to the database after running this notebook.
+4. Run ``etl.ipynb`` to  to develop ETL processes for each table. At the end of each table section, or at the end of the notebook, run ``test.ipynb`` to confirm that records were successfully inserted into each table. **Remember to rerun ``create_tables.py`` to reset your tables before each time you run this notebook.**
+5. Run ``etl.py`` to process the entire datasets. **Remember to run ``create_tables.py`` before running ``etl.py`` to reset your tables. Run ``test.ipynb`` to confirm your records were successfully inserted into each table.**
